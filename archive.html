@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Programme hebdomadaire de l'Église Lumière & Grâce - Découvrez nos cultes, réunions de prière et activités communautaires à Abidjan." />
+  <meta name="keywords" content="programme église, cultes chrétiens, horaires messes, Abidjan, prière, communauté" />
+  <title>Programme - Église Lumière & Grâce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ss.css">
+</head>
+<body>
+  <script>
+    //pour se connecter
+    if(localStorage.getItem("connecte") !=="oui"){
+
+    window.location.href="login.html";
+    }
+  </script>
+
+<header id="navbar" role="navigation" aria-label="Menu principal">
+  <div class="nav-partners">
+    <div class="partner-item">
+      <img src="image logo/WhatsApp Image 2026-04-25 at 00.08.39.jpeg" alt="Église la Fondation Vivante">
+      <span><strong>Église la Fondation Vivante</strong></span>
+    </div>
+    <div class="partner-item">
+      <img src="image logo/WhatsApp Image 2026-04-25 at 00.08.05.jpeg" alt="Communauté Fréquence Prophetique">
+      <span><strong>Communauté Fréquence Prophetique</strong></span>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html#accueil">Accueil</a></li>
+    <li><a href="archive.html" class="nav-cta">Archive</a></li>
+    <li><a href="index.html#galerie">Galerie</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <button class="burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menu mobile" aria-hidden="true">
+  <a href="index.html#accueil" onclick="closeMenu()">Accueil</a>
+  <a href="archive.html" onclick="closeMenu()">Archive</a>
+  <a href="index.html#galerie" onclick="closeMenu()">Galerie</a>
+  <a href="index.html#contact" onclick="closeMenu()">Contact</a>
+</nav>
+
+<!-- CONTENU PRINCIPAL DE LA PAGE PROGRAMME -->
+<div class="wrapper">
+
+  <header>
+    <div class="logo-row">
+      <div class="logo-icon">🗄️</div>
+      <h1>ArchiveVault</h1>
+    </div>
+    <p>Photos · Vidéos · Audio · Documents · Notes · Messages</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="num" id="st-total">0</div><div class="lbl">Total</div></div>
+    <div class="stat"><div class="num" id="st-photo">0</div><div class="lbl">Photos</div></div>
+    <div class="stat"><div class="num" id="st-video">0</div><div class="lbl">Vidéos</div></div>
+    <div class="stat"><div class="num" id="st-note">0</div><div class="lbl">Notes</div></div>
+    <div class="stat"><div class="num" id="st-other">0</div><div class="lbl">Autres</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">✦ Nouvelle entrée</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Titre</label>
+        <input type="text" id="f-title" placeholder="Nom ou sujet…"/>
+      </div>
+      <div class="field">
+        <label>Type</label>
+        <select id="f-type" onchange="onTypeChange()">
+          <option value="photo">🖼️ Photo</option>
+          <option value="video">🎬 Vidéo</option>
+          <option value="audio">🎵 Audio</option>
+          <option value="document">📄 Document</option>
+          <option value="message">💬 Message</option>
+          <option value="note">📝 Note</option>
+          <option value="lien">🔗 Lien</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="file-section">
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="f-file" onchange="onFileSelected(event)"/>
+        <div class="dz-icon" id="dz-icon">🖼️</div>
+        <div class="dz-text">Glisse un fichier ici ou <span>clique pour choisir</span></div>
+        <div class="dz-sub" id="dz-sub">Images : JPG, PNG, GIF, WebP…</div>
+      </div>
+    </div>
+
+    <div id="file-preview-wrap">
+      <div class="file-thumb">
+        <div id="thumb-preview"></div>
+        <div class="file-info">
+          <div class="fname" id="thumb-name"></div>
+          <div class="fsize" id="thumb-size"></div>
+        </div>
+        <button class="btn-rm" onclick="removeFile()">✕</button>
+      </div>
+    </div>
+
+    <div id="progress-wrap">
+      <div class="pb-bg"><div class="pb-fill" id="pb"></div></div>
+      <div class="pb-lbl" id="pb-lbl">Chargement…</div>
+    </div>
+
+    <div class="grid1" id="note-on-file" style="display:none">
+      <div class="field">
+        <label>Description (optionnel)</label>
+        <textarea id="f-note" rows="2" placeholder="Ajoute une description…"></textarea>
+      </div>
+    </div>
+
+    <div class="grid1" id="text-section" style="display:none">
+      <div class="field">
+        <label id="text-label">Contenu</label>
+        <textarea id="f-content" rows="4" placeholder="Saisis ici…"></textarea>
+      </div>
+    </div>
+
+    <button class="btn-save" id="btn-save" onclick="saveEntry()">+ Enregistrer dans l'archive</button>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="🔍  Rechercher…" oninput="renderList()"/>
+    <select id="filter-type" onchange="renderList()">
+      <option value="">Tous les types</option>
+      <option value="photo">🖼️ Photos</option>
+      <option value="video">🎬 Vidéos</option>
+      <option value="audio">🎵 Audio</option>
+      <option value="document">📄 Documents</option>
+      <option value="message">💬 Messages</option>
+      <option value="note">📝 Notes</option>
+      <option value="lien">🔗 Liens</option>
+    </select>
+  </div>
+
+  <div class="list-header">
+    <h2>Archive</h2>
+    <button class="btn-clear" onclick="clearAll()">🗑 Tout effacer</button>
+  </div>
+  <div id="archive-list"></div>
+</div>
+
+<div id="modal" onclick="closeModal(event)">
+  <div id="modal-inner">
+    <button id="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<div id="toast">✓ Enregistré !</div>
+  
+
+<button onclick="logout()">Déconnecter</button>
+
+  <section id="contact" style="background: var(--white);">
+    <div class="section-label reveal">Contact</div>
+    <h2 class="section-title reveal delay-1">Besoin de <em>renseignements</em> ?</h2>
+    <p class="section-desc reveal delay-2">
+      Notre équipe est à votre disposition pour répondre à vos questions sur le programme,
+      vous aider à choisir le service adapté ou vous accompagner dans votre démarche.
+    </p>
+    <div class="contact-info reveal delay-3" style="padding-right: 0;">
+      <div class="contact-detail">
+        <div class="contact-icon">📍</div>
+        <div class="contact-text">
+          <small>Adresse</small>
+          <p>12 Rue de l'Évangile, Cocody, Abidjan</p>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-text">
+          <small>Email</small>
+          <p>contact@eglise-lumiere.ci</p>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">📞</div>
+        <div class="contact-text">
+          <small>Téléphone</small>
+          <p>+225 07 XX XX XX XX</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER : bas de page, liens utiles et partenaires -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo">
+        <div class="logo-img">
+          <img src="image logo/WhatsApp Image 2026-04-25 at 00.08.05.jpeg" alt="Logo - La Fréquence du Saint Esprit">
+        </div>
+        <span class="logo-name" style="color: var(--white)">Lumière <span style="color: var(--gold)">& Grâce</span></span>
+      </div>
+      <p>Découvrez un programme clair, respectueux et conçu pour faire grandir votre foi chaque semaine.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="index.html#accueil">Accueil</a></li>
+        <li><a href="programme.html">Programme</a></li>
+        <li><a href="index.html#galerie">Galerie</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Informations</h4>
+      <ul>
+        <li><a href="#programme">Services</a></li>
+        <li><a href="#infos">Ateliers</a></li>
+        <li><a href="#contact">Inscription</a></li>
+        <li><a href="#">À propos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Ressources</h4>
+      <ul>
+        <li><a href="index.html#videos">Médias</a></li>
+        <li><a href="#">Blog spirituel</a></li>
+        <li><a href="#">Événements</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Église Lumière & Grâce — Tous droits réservés</span>
+    <span>Fait avec ❤️ pour la gloire de Dieu · <a href="#">Politique de confidentialité</a></span>
+  </div>
+</footer>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  if (burger && mobileMenu) {
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    burger.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('open');
+      burger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+      burger.setAttribute('aria-expanded', String(isOpen));
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+  }
+
+  function closeMenu() {
+    if (!burger || !mobileMenu) return;
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  if (revealEls.length > 0) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach((el) => revealObserver.observe(el));
+  }
+
+
+
+
+
+const KEY = 'archivevault_v2';
+const FILE_TYPES = ['photo','video','audio','document'];
+const ICONS = { photo:'🖼️', video:'🎬', audio:'🎵', document:'📄', message:'💬', note:'📝', lien:'🔗' };
+const DZ_HINTS = { photo:'Images : JPG, PNG…', video:'Vidéos : MP4, MOV…', audio:'Audio : MP3, WAV…', document:'PDF, Word, Excel…' };
+
+let currentFile = null;
+
+function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } }
+function save(d) { localStorage.setItem(KEY, JSON.stringify(d)); }
+function fmtSize(b) { return b > 1048576 ? (b/1048576).toFixed(1)+' MB' : (b/1024).toFixed(0)+' KB'; }
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'})
+       + ' ' + d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function onTypeChange() {
+  const t = document.getElementById('f-type').value;
+  const isFile = FILE_TYPES.includes(t);
+  document.getElementById('file-section').style.display   = isFile ? 'block' : 'none';
+  document.getElementById('note-on-file').style.display   = isFile ? 'block' : 'none';
+  document.getElementById('text-section').style.display   = isFile ? 'none'  : 'block';
+  document.getElementById('dz-icon').textContent = ICONS[t] || '📁';
+  document.getElementById('dz-sub').textContent  = DZ_HINTS[t] || '';
+  const labels = { message:'Message', note:'Note', lien:'URL / Lien' };
+  document.getElementById('text-label').textContent = labels[t] || 'Contenu';
+  removeFile();
+}
+
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if (f) processFile(f); });
+
+function onFileSelected(e) { const f = e.target.files[0]; if (f) processFile(f); }
+
+function processFile(file) {
+  document.getElementById('progress-wrap').classList.add('show');
+  document.getElementById('pb').style.width = '0%';
+  document.getElementById('pb-lbl').textContent = 'Lecture du fichier…';
+  document.getElementById('btn-save').disabled = true;
+
+  const reader = new FileReader();
+  reader.onprogress = e => {
+    if (e.lengthComputable) {
+      const pct = Math.round(e.loaded / e.total * 100);
+      document.getElementById('pb').style.width = pct + '%';
+      document.getElementById('pb-lbl').textContent = `Chargement… ${pct}%`;
+    }
+  };
+  reader.onload = e => {
+    document.getElementById('pb').style.width = '100%';
+    document.getElementById('pb-lbl').textContent = '✓ Prêt';
+    setTimeout(() => { document.getElementById('progress-wrap').classList.remove('show'); }, 800);
+    currentFile = { name: file.name, size: file.size, mime: file.type, dataURL: e.target.result };
+    showThumb(currentFile);
+    document.getElementById('btn-save').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+function showThumb(f) {
+  let html = '';
+  if (f.mime.startsWith('image/'))      html = `<img src="${f.dataURL}" alt="preview" style="width:72px;height:56px;object-fit:cover;border-radius:6px"/>`;
+  else if (f.mime.startsWith('video/')) html = `<video src="${f.dataURL}" muted style="width:72px;height:56px;object-fit:cover;border-radius:6px"></video>`;
+  else { const ic = f.mime.startsWith('audio/') ? '🎵' : '📄'; html = `<div class="thumb-icon">${ic}</div>`; }
+  document.getElementById('thumb-preview').innerHTML = html;
+  document.getElementById('thumb-name').textContent  = f.name;
+  document.getElementById('thumb-size').textContent  = fmtSize(f.size);
+  document.getElementById('file-preview-wrap').classList.add('show');
+}
+
+function removeFile() {
+  currentFile = null;
+  document.getElementById('file-preview-wrap').classList.remove('show');
+  document.getElementById('thumb-preview').innerHTML = '';
+  document.getElementById('f-file').value = '';
+  document.getElementById('progress-wrap').classList.remove('show');
+  document.getElementById('btn-save').disabled = false;
+}
+
+function saveEntry() {
+  const title  = document.getElementById('f-title').value.trim();
+  const type   = document.getElementById('f-type').value;
+  const isFile = FILE_TYPES.includes(type);
+  const entry  = { id: Date.now().toString(), title: title || '(sans titre)', type, date: new Date().toISOString() };
+
+  if (isFile) {
+    if (!currentFile) { alert('Sélectionne un fichier.'); return; }
+    entry.file = currentFile;
+    entry.note = document.getElementById('f-note').value.trim();
+  } else {
+    const content = document.getElementById('f-content').value.trim();
+    if (!content) { alert('Le contenu est obligatoire.'); return; }
+    entry.content = content;
+  }
+
+  const data = load();
+  data.push(entry);
+  try { save(data); } catch(e) { alert('Stockage plein ! Supprime des fichiers volumineux.'); return; }
+
+  document.getElementById('f-title').value   = '';
+  document.getElementById('f-content').value = '';
+  document.getElementById('f-note').value    = '';
+  removeFile();
+  renderList();
+  showToast();
+}
+
+function deleteEntry(id) {
+  if (!confirm('Supprimer cette entrée ?')) return;
+  save(load().filter(e => e.id !== id));
+  renderList();
+}
+
+function clearAll() {
+  if (!confirm('Effacer TOUT ? Action irréversible.')) return;
+  localStorage.removeItem(KEY);
+  renderList();
+}
+
+function downloadFile(id) {
+  const entry = load().find(e => e.id === id);
+  if (!entry?.file) return;
+  const a = document.createElement('a');
+  a.href = entry.file.dataURL;
+  a.download = entry.file.name;
+  a.click();
+}
+
+function openModal(id) {
+  const entry = load().find(e => e.id === id);
+  if (!entry?.file) return;
+  const f = entry.file;
+  let html = `<h3 style="margin-bottom:16px;font-family:'Playfair Display',serif;color:var(--accent)">${entry.title}</h3>`;
+  if (f.mime.startsWith('image/'))      html += `<img src="${f.dataURL}" alt="${f.name}"/>`;
+  else if (f.mime.startsWith('video/')) html += `<video src="${f.dataURL}" controls style="width:100%;border-radius:8px"></video>`;
+  else if (f.mime.startsWith('audio/')) html += `<audio src="${f.dataURL}" controls style="width:100%"></audio>`;
+  else html += `<div style="text-align:center;padding:40px;font-size:60px">📄</div><p style="text-align:center;color:var(--muted)">${f.name}</p>`;
+  if (entry.note) html += `<p style="margin-top:14px;font-size:14px;color:var(--muted)">${entry.note}</p>`;
+  document.getElementById('modal-content').innerHTML = html;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) document.getElementById('modal').classList.remove('open');
+}
+
+function renderList() {
+  const data = load();
+  const q  = document.getElementById('search').value.toLowerCase();
+  const ft = document.getElementById('filter-type').value;
+
+  document.getElementById('st-total').textContent = data.length;
+  document.getElementById('st-photo').textContent = data.filter(e=>e.type==='photo').length;
+  document.getElementById('st-video').textContent = data.filter(e=>e.type==='video').length;
+  document.getElementById('st-note').textContent  = data.filter(e=>e.type==='note').length;
+  document.getElementById('st-other').textContent = data.filter(e=>!['photo','video','note'].includes(e.type)).length;
+
+  const filtered = data.filter(e => {
+    const matchQ = !q || e.title.toLowerCase().includes(q) || (e.content||'').toLowerCase().includes(q) || (e.note||'').toLowerCase().includes(q) || (e.file?.name||'').toLowerCase().includes(q);
+    return matchQ && (!ft || e.type === ft);
+  }).reverse();
+
+  const list = document.getElementById('archive-list');
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><div class="eicon">${data.length?'🔍':'📭'}</div><p>${data.length?'Aucun résultat.':'Archive vide !'}</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(e => {
+    let mediaHTML = '', actionsHTML = '';
+    if (e.file) {
+      const f = e.file;
+      const canPreview = f.mime.startsWith('image/') || f.mime.startsWith('video/') || f.mime.startsWith('audio/');
+      if (f.mime.startsWith('image/'))
+        mediaHTML = `<div class="card-media"><img src="${f.dataURL}" alt="${f.name}" loading="lazy" onclick="openModal('${e.id}')"/></div>`;
+      else if (f.mime.startsWith('video/'))
+        mediaHTML = `<div class="card-media"><video src="${f.dataURL}" controls preload="metadata"></video></div>`;
+      else if (f.mime.startsWith('audio/'))
+        mediaHTML = `<div class="card-media"><audio src="${f.dataURL}" controls preload="metadata"></audio></div>`;
+      else
+        mediaHTML = `<div class="card-media"><div class="card-media-icon">📄</div></div>`;
+
+      actionsHTML = `<div class="card-actions">
+        <button class="btn-action" onclick="downloadFile('${e.id}')">⬇ Télécharger</button>
+        ${canPreview ? `<button class="btn-action" onclick="openModal('${e.id}')">👁 Voir</button>` : ''}
+        <button class="btn-del2" onclick="deleteEntry('${e.id}')">🗑</button>
+      </div>`;
+    } else {
+      actionsHTML = `<div class="card-actions"><button class="btn-del2" onclick="deleteEntry('${e.id}')" style="flex:1">🗑 Supprimer</button></div>`;
+    }
+
+    const sub   = e.file    ? `<div class="card-sub">${e.file.name} · ${fmtSize(e.file.size)}</div>` : '';
+    const noteH = e.note    ? `<div class="card-content" style="font-style:italic">${e.note}</div>` : '';
+    let contH = '';
+    if (e.content) {
+      contH = e.type === 'lien'
+        ? `<div class="card-content"><a href="${e.content}" target="_blank" style="color:var(--accent);word-break:break-all">${e.content}</a></div>`
+        : `<div class="card-content">${e.content}</div>`;
+    }
+
+    return `<div class="entry-card">
+      ${mediaHTML}
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-type-badge">${ICONS[e.type]} ${e.type}</span>
+          <span class="card-date">${fmtDate(e.date)}</span>
+        </div>
+        <div class="card-title">${e.title}</div>
+        ${sub}${contH}${noteH}
+      </div>
+      ${actionsHTML}
+    </div>`;
+  }).join('');
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Init
+onTypeChange();
+renderList();
+
+//deconnexion
+
+function logout(){
+  localStorage.removeItem("connecte");
+  window.location.href="login.html";
+}
+</script>

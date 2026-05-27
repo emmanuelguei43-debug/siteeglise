@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>administrateur</title>
+</head>
+<style>
+    body{
+        background-color: skyblue;
+    }
+    main{
+        width: 900px;
+        background-color: aquamarine;
+        position: relative;
+        margin-top: 200px;
+        margin-left: 200px;
+        
+
+    }
+    button{
+        border: 10px;
+        border-radius: 5px;
+        border-color: brown;
+        background-color: rgb(0, 20, 20);
+        color: aliceblue;
+        font-style: oblique;
+        margin-left:500px;
+    }
+
+    input{
+                border: 10px;
+        border-radius: 5px;
+        border-color: brown;
+        background-color: rgb(0, 20, 20);
+        color: aliceblue;
+        font-style: oblique;
+        margin-left:500px;
+    }
+
+</style>
+<body>
+    <main>
+    <h1>login connexion</h1>
+
+    <input type="text" id="nom" placeholder="nom de l'utilisateur"><br><br>
+    <input type="password"  id="mdp" placeholder="entrez le mot de passe"><br><br>
+
+    <button id="btncon">connecter</button>
+    <p id="message"></p>
+    </main>
+    <script>
+
+  var nom=document.getElementById('nom');
+  var mdp=document.getElementById('mdp');
+var btncon=document.getElementById('btncon');
+var message=document.getElementById('message');
+
+btncon.addEventListener('click', action);
+    function action(){
+     if(nom.value ==="admi" && mdp.value==="1234"){
+        message.innerHTML="Réussi";
+           
+        //changement de page
+        localStorage.setItem("connecte","oui");
+        window.location.href="archive.html";
+     } else{
+        message.innerHTML= "mot de passe ou identité incorrect";
+     }
+    }
+
+    </script>
+</body>
+</html>
